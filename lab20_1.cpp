@@ -20,20 +20,65 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
-
+void importDataFromFile(string filename,vector<string> &names,vector<int> &scores, vector<char> &grade) {
+    ifstream myfile (filename);
+    string line;
+    char format[] = "%[^:]:%d %d %d";
+    char namel[100];
+    int a,b,c;
+    
+    while(getline (myfile,line)){
+       const char *line2 = line.c_str();
+       sscanf(line2,format,namel,&a,&b,&c);
+       int sumscore =a+b+c;
+       names.push_back(namel);
+       scores.push_back(sumscore);
+       grade.push_back(score2grade(sumscore));
+    }
 }
 
-void getCommand(){
-
+void getCommand(string &command, string &key){
+    cout << "Please input your command: ";
+    cin >> command;
+    if(toUpperStr (command) == "GRADE" || toUpperStr (command) == "NAME"){
+        cin.ignore();
+        getline(cin,key);
+    }
 }
 
-void searchName(){
 
+void searchName(const vector<string> &names, const vector<int> &scores, const vector<char> &grades, string key){
+    bool found = false;
+    cout << "---------------------------------" << endl;
+    for(size_t i = 0; i < names.size(); ++i){
+        if(toUpperStr(names[i]) == key){
+            cout << names[i] << "'s score = " << scores[i] << endl;
+            cout << names[i] << "'s grade = " << grades[i] << endl;
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        cout << "Cannot found." << endl;
+        
+    }
+    cout << "---------------------------------" << endl;
 }
 
-void searchGrade(){
-
+void searchGrade(const vector<string> &names, const vector<int> &scores, const vector<char> &grades, string key){
+    char grade = key[0];
+    bool found = false;
+    cout << "---------------------------------" << endl;
+    for(size_t i = 0; i < grades.size(); ++i){
+        if(grades[i] == grade){
+            cout << names[i] << " (" << scores[i] << ")" << endl;
+            found = true;
+        }
+    }
+    if(!found){
+        cout << "Cannot found." << endl;
+    }
+    cout << "---------------------------------" << endl;
 }
 
 
